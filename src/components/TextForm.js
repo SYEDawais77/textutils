@@ -50,7 +50,7 @@ export default function TextForm(props) {
             const emails = extractEmails(text);
             setUniqueEmails(new Set(emails));
         } else {
-            props.showAlert("No Email Address found in the text you entered", 'info')
+            props.showAlert("No Email Address found in the text you entered in the text area", 'info')
         }
     };
 
