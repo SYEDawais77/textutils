@@ -22,14 +22,21 @@ export default function TextForm(props) {
         setStyle1('none')
     }
 
-    function countWords() {
-        let splitedTextLenght = text.split(' ').length
-        if (text.endsWith(' ')) {
-            return splitedTextLenght = splitedTextLenght - 1
+    function toTitleCase() {
+        if ((text === null) || (text === ''))
+            return props.showAlert("Please enter some text in the Text Area", 'info');
+        else
+            text.toString();
 
-        } else {
-            return text.split(' ').length
-        }
+        setText(text.replace(/\w\S*/g,
+            function (txt) {
+                return txt.charAt(0).toUpperCase() +
+                    txt.slice(1).toLowerCase();
+            }));
+    }
+
+    function countWords() {
+        return text.split(/\s+/).filter((element) => { return element.length !== 0 }).length
     }
 
 
@@ -69,23 +76,24 @@ export default function TextForm(props) {
                 <div className="mb-3">
                     <textarea className="form-control" style={{ background: props.mode === 'light' ? 'white' : '#042743', color: props.mode === 'light' ? 'black' : 'white' }} value={text} onChange={onChangeText} id="textArea" rows="10"></textarea>
                 </div>
-                <button className="btn btn-primary my-2" onClick={HanldetoUpper}>Conver to Uppercase</button>
-                <button className="btn btn-primary mx-3 my-2" onClick={HandletoLower}>Conver to Lower Case</button>
-                <button className="btn btn-primary mx-3 my-2" onClick={handleEmailExtractor}>Extract Email Adress</button>
-                <button className="btn btn-primary mx-3 my-2" onClick={handleClear}>Clear Text Area</button>
+                <button className="btn btn-primary mx-3 my-2" disabled={text.length === 0} onClick={HanldetoUpper}>Convert to Uppercase</button>
+                <button className="btn btn-primary mx-3 my-2" disabled={text.length === 0} onClick={HandletoLower}>Convert to Lower Case</button>
+                <button className="btn btn-primary mx-3 my-2" disabled={text.length === 0} onClick={toTitleCase}>Convert to Title Case</button>
+                <button className="btn btn-primary mx-3 my-2" disabled={text.length === 0} onClick={handleEmailExtractor}>Extract Email Address</button>
+                <button className="btn btn-primary mx-3 my-2" disabled={text.length === 0} onClick={handleClear}>Clear Text Area</button>
 
                 <h2 className='my-3'>Your Text Summary</h2>
-                <p> {countWords()} Words and {text.length} Charcters </p>
-                <p> {0.008 * text.split(' ').length} minutes read </p>
+                <p> {countWords()} Words and {text.length} Characters </p>
+                <p> {0.008 * countWords()} minutes read </p>
 
                 <h2>Text Preview</h2>
                 <p>{text.length > 0 ? text : "Enter text to preview"}</p>
 
-                <div id='emailAdressesContainer' style={{ display: style1 }} >
+                <div id='emailAddressesContainer' style={{ display: style1 }} >
                     <h2>Unique Email Addresses:</h2>
                     <ul>
                         {Array.from(uniqueEmails).map((email, index) => (
-                            <li key={index}>{email.length > 0 ? email : "No Email Adress found in the above enterd text"}</li>
+                            <li key={index}>{email.length > 0 ? email : "No Email Address found in the above entered text"}</li>
                         ))}
                     </ul>
                 </div>
